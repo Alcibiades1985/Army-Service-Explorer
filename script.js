@@ -6794,18 +6794,10 @@ battles = BATTLE_ORDER.filter(b => (battles || []).includes(b));
 
 const battleStack = document.createElement("div");
 battleStack.style.position = "absolute";
-
-/* restore the original safe corridor */
-battleStack.style.bottom = "10px";
-battleStack.style.right = "155px";
-battleStack.style.top = "auto";
-battleStack.style.left = "auto";
-
 battleStack.style.display = "flex";
 battleStack.style.flexDirection = "column";
 battleStack.style.alignItems = "flex-start";
 battleStack.style.gap = "4px";
-
 overlay.appendChild(battleStack);
 
 (battles || []).forEach((b) => {
@@ -6821,8 +6813,21 @@ overlay.appendChild(battleStack);
   label.style.color = "#111";
   label.style.textAlign = "left";
   battleStack.appendChild(label);
+});
 
-  });
+// --- restore original safe corridor, but scale it with the rendered map ---
+const REF_MAP_WIDTH = 340;
+const REF_MAP_HEIGHT = 210;
+const REF_RIGHT = 118;   // tuned from your current screenshot
+const REF_BOTTOM = 8;    // keeps stack low enough not to hit Liège
+
+const scaleX = overlay.clientWidth / REF_MAP_WIDTH;
+const scaleY = overlay.clientHeight / REF_MAP_HEIGHT;
+
+battleStack.style.right = `${Math.round(REF_RIGHT * scaleX)}px`;
+battleStack.style.bottom = `${Math.round(REF_BOTTOM * scaleY)}px`;
+battleStack.style.top = "auto";
+battleStack.style.left = "auto";
 
     //Draw connector lines between stacked labels and pins
 const svgBox = svg.getBoundingClientRect();
@@ -7412,8 +7417,22 @@ const data = new google.visualization.DataTable();
     legend: "none"
   };
 
-  const chart = new google.visualization.GeoChart(container);
-  chart.draw(data, options);
+const chart = new google.visualization.GeoChart(container);
+chart.draw(data, options);
+
+if (container.__wwiResizeObserver) {
+  container.__wwiResizeObserver.disconnect();
+}
+
+let __wwiResizeTimer = null;
+container.__wwiResizeObserver = new ResizeObserver(() => {
+  clearTimeout(__wwiResizeTimer);
+  __wwiResizeTimer = setTimeout(() => {
+    chart.draw(data, options);
+  }, 80);
+});
+
+container.__wwiResizeObserver.observe(container);
 
   // --- Overlay labels (stacked WWI-style) ---
   google.visualization.events.addListener(chart, "ready", () => {
@@ -8288,6 +8307,7 @@ window.estimateWWII = estimateWWII;
 
 })();
 })();
+
 
 
 
