@@ -7151,17 +7151,14 @@ window.showAlternateTheatreCard = showAlternateTheatreCard;
           </div>
         `;
 
-    return `
-      <div class="result-card hotspot-card">
-        <h3>Recruitment Hotspot</h3>
-        <div class="hotspot-content">
-          <div class="hotspot-left">
-            ${leftHTML}
-          </div>
-          ${rightHTML}
-        </div>
-      </div>
-    `;
+return `
+  <div class="hotspot-content">
+    <div class="hotspot-left">
+      ${leftHTML}
+    </div>
+    ${rightHTML}
+  </div>
+`;
   }
 
   // --- Draw simple UK Hotspot Map ---
@@ -8285,4 +8282,5 @@ window.estimateWWII = estimateWWII;
 
 })();
 })();
+
 
