@@ -1,0 +1,196 @@
+<div class="startup">
+ <div class="startup-logo-wrap">
+  <span class="logo-line"></span>
+  <img src="https://primary.jwwb.nl/public/p/m/r/temp-cupfxhldzeeawpzcrjuo/site-icon-standard.png" 
+       alt="History Recon Logo" 
+       class="startup-logo">
+  <span class="logo-line"></span>
+</div>    
+
+<div class="startup-heading-block">
+  <h1 class="startup-heading">
+    The Army Service Explorer
+  </h1>
+  <h2 class="startup-tagline">
+    <em>74 WWI infantry regiments and all numbered WWII regiments &amp; corps</em>
+  </h2>
+</div>
+  
+  <div class="startup-divider"></div>
+
+<h1 class="startup-title">In which conflict did your soldier serve?</h1>
+  <div class="era-grid">
+    <button id="wwiBtn" class="era-card">
+      <span class="era-badge">WWI</span>
+      <span class="era-heading">First World War</span>
+      <span class="era-sub">1914–1918</span>
+    </button>
+    <button id="wwiiBtn" class="era-card">
+      <span class="era-badge">WWII</span>
+      <span class="era-heading">Second World War</span>
+      <span class="era-sub">1939–1945</span>
+    </button>
+  </div>
+</div>
+
+
+<!-- ==========================================
+     WWI MODE SELECTION PANEL (Dual-Axis Original)
+     ========================================== -->
+<div id="wwiModePanel" class="mode-panel fade-panel hidden">
+  <h2>How would you like to explore your soldier’s Great War story?</h2>
+  
+  <hr class="mode-divider-top">
+
+<div class="mode-grid">
+  <div class="mode-action-set">
+    <button id="wwiEstimatorBtn" class="mode-btn">SEARCH BY<BR>ARMY NUMBER</button>
+    <p class="mode-subtext">Uncover enlistment details, recruitment areas and service history.</p>
+  </div>
+
+  <div class="mode-action-set">
+    <button id="wwiResearchBtn" class="mode-btn">SEARCH BY<BR>BATTALION</button>
+    <p class="mode-subtext">Explore unit movements, battles, and casualty data.</p>
+  </div>
+</div>
+  
+  <hr class="mode-divider">
+
+  <p class="mode-officer-note">
+    This tool currently only applies to Other Ranks (non-commissioned soldiers). Officer service numbers followed separate systems.
+  </p>
+</div>
+
+<!-- ==========================================
+     WWII MODE SELECTION PANEL (Dual-Axis Match)
+     ========================================== -->
+<div id="wwiiModePanel" class="mode-panel fade-panel hidden">
+  <h2>How would you like to explore your soldier’s Second World War story?</h2>
+  
+  <hr class="mode-divider-top">
+
+  <div class="mode-grid">
+    <div class="mode-action-set">
+      <button id="wwiiEstimatorBtn" class="mode-btn">SEARCH BY<BR>ARMY NUMBER</button>
+      <p class="mode-subtext">Uncover their Corps/Regiment, potential medal entitlement & service history.</p>
+    </div>
+
+    <div class="mode-action-set">
+      <button id="wwiiResearchBtn" class="mode-btn">SEARCH BY<BR>CORPS/REGIMENT</button>
+      <p class="mode-subtext">Explore unit battles, recruitment areas and casualty data.</p>
+    </div>
+  </div>
+  
+  <hr class="mode-divider">
+
+  <p class="mode-officer-note">
+    This tool currently only applies to Other Ranks (non-commissioned soldiers). Officer service numbers followed separate systems.
+  </p>
+</div>
+
+<!-- WWI panel (cleaned) -->
+<div id="wwiPanel" class="panel hidden">
+  <div class="estimator-container">
+    <h1>WWI Soldier Service Estimator</h1>
+    <hr class="estimator-divider">
+
+    <input type="hidden" id="regiment" value="">
+
+    <label for="regimentSearch">Regiment:</label>
+    <div class="typeahead-wrap">
+      <input id="regimentSearch" type="text" placeholder="Start typing… e.g. Norfolk, London" autocomplete="off">
+      <div id="regimentResults" class="typeahead-list"></div>
+    </div>
+
+    <label for="serviceNumber">Service Number:</label>
+    <input type="text" id="serviceNumber" placeholder="e.g. 204576 or 28/852" />
+
+    <button onclick="estimate()">Estimate</button>
+
+    <div id="trafficLight" style="font-size: 1.5em; margin-top: 10px;"></div>
+
+    <!-- 🔄 CHANGED: separate output container for WWI only -->
+    <div id="wwiResult"></div>
+
+<div class="cta cta-final">
+  <p><strong>Every service number hides a deeper story.</strong></p>
+  <a href="https://www.historyrecon.co.uk/research" target="_blank" rel="noopener">🔎 View research packages</a>
+</div>
+  </div>
+</div>
+
+<!-- WWII panel (cleaned) -->
+  <div id="wwiiPanel" class="panel hidden">
+  <div class="estimator-container">
+    <h1>WWII Soldier Service Estimator</h1>
+<hr class="estimator-divider">
+
+    <label for="serviceNumberWWII">Army Number:</label>
+    <input type="text" id="serviceNumberWWII" placeholder="e.g. 5173621" />
+
+    <button onclick="estimate()">Estimate</button>
+
+    <div id="resultWWII"></div>
+
+<div class="cta cta-final">
+  <p><strong>Every service number hides a deeper story.</strong></p>
+  <a href="https://www.historyrecon.co.uk/research" target="_blank" rel="noopener">🔎 View research packages</a>
+</div>
+  </div>
+    
+    <!-- ==========================================
+     WWI BATTALION HISTORY PANEL
+     ========================================== -->
+<div id="wwiBattalionPanel" class="panel hidden">
+  <div class="estimator-container">
+    <h1>WWI Battalion History Explorer</h1>
+    <hr class="estimator-divider">
+
+    <label for="regimentSearchBattalion">Regiment:</label>
+    <div class="typeahead-wrap">
+      <input id="regimentSearchBattalion" type="text" placeholder="Start typing… e.g. London, Seaforth" autocomplete="off">
+      <div id="regimentResultsBattalion" class="typeahead-list"></div>
+    </div>
+
+    <label for="battalionSelect">Battalion:</label>
+    <select id="battalionSelect">
+      <option value="">Select Battalion</option>
+    </select>
+
+<button id="exploreBattalionBtn">Explore</button>
+
+<!-- Unified output container for battalion cards -->
+<div id="battalionResults" class="battalion-results"></div>
+
+<div class="cta cta-final">
+  <p><strong>Every service number hides a deeper story.</strong></p>
+  <a href="https://www.historyrecon.co.uk/research" target="_blank" rel="noopener">🔎 View research packages</a>
+</div>
+  </div>
+</div>
+    
+<!-- ==========================================
+     WWII REGIMENTAL HISTORY PANEL (Axis 4)
+     ========================================== -->
+<div id="wwiiRegimentalPanel" class="panel hidden">
+  <div class="estimator-container">
+    <h1>WWII Regimental History Explorer</h1>
+<hr class="estimator-divider">
+
+    <label for="regimentSearchWWII">Regiment:</label>
+    <div class="typeahead-wrap">
+      <input id="regimentSearchWWII" type="text" placeholder="Start typing… e.g. London, Essex" autocomplete="off">
+      <div id="regimentResultsWWII" class="typeahead-list"></div>
+    </div>
+
+    <button id="exploreRegimentalBtn">Explore</button>
+
+    <!-- Unified output container for future cards -->
+    <div id="regimentalResults" class="battalion-results"></div>
+
+<div class="cta cta-final">
+  <p><strong>Every service number hides a deeper story.</strong></p>
+  <a href="https://www.historyrecon.co.uk/research" target="_blank" rel="noopener">🔎 View research packages</a>
+</div>
+  </div>
+</div>

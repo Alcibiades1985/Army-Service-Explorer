@@ -1,0 +1,956 @@
+/* Base */
+body {
+  font-family: sans-serif;
+  background-color: #f8f8f8;
+  color: #333;  
+  padding: 20px;
+}
+
+/* Container */
+.estimator-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #fff;
+  border: 3px solid #bab86c; /* khaki */
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* Headings & form */
+h1 { color: #737373; } /* charcoal */
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #bab86c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover { background-color: #9c9a52; }
+
+/* Result area (wrapper only now; individual cards below) */
+#result {
+  margin-top: 20px;
+  padding: 0;           /* cards handle their own padding */
+  background: transparent;
+  border: 0;
+  font-weight: normal;  /* card titles carry the emphasis */
+}
+
+/* Grid of result cards + balanced light-grey field */
+.wwi-grid {
+  display: grid;
+  gap: 15px;
+  background-color: #f9f9f9;        /* soft field */
+  padding: 25px 32px;               /* inner breathing space */
+  border-radius: 16px;
+  width: calc(100% + 45px);         /* expand to overlap both edges equally */
+  margin-left: -22px;               /* pull left to match extra width */
+  margin-right: -200px;              /* keep symmetrical */
+  margin-top: 18px;
+  box-sizing: border-box;
+}
+
+.wwi-card {
+  border: 3px solid #bab86c;     /* khaki border */
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(0,0,0,0.06);
+  color: #333;
+  margin-left: -9px;             /* shift all cards left slightly */
+}
+
+.wwi-card h3 {
+  margin: 0 0 6px;
+  color: #737373;               /* charcoal title */
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-color: #737373;  /* charcoal underline */
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;      /* slight gap below text */
+}
+
+/* Badges for flags (TF/Admin/Transfer) */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.badge {
+  display: inline-block;
+  border: 1px solid #bab86c;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Notes / warnings card variant */
+.wwi-warning-card {
+  background: #fff8e6;          /* subtle amber tint */
+  border-color: #e6c767;        /* deeper khaki/amber */
+}
+
+/* Bullet list for warnings */
+.warning-list {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+.warning-list li { margin: 4px 0; }
+
+/* Old single-result styles (kept for other sections if used) */
+.disclaimer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+  background-color: #fef9e7;
+  border-left: 4px solid #bab86c;
+  padding: 10px;
+}
+
+.warning {
+  color: #b30000;
+  font-weight: bold;
+  margin-top: 10px;
+  padding-left: 5px;
+}
+
+/* --- Typeahead Styles --- */
+.typeahead-wrap { position: relative; } /* anchors dropdown to input */
+
+.typeahead-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 2px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.typeahead-item {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.typeahead-item:hover { background-color: #f2f1e0; } /* light khaki tint */
+
+
+/* ===== WWII Theatres Map Styles (appended) ===== */
+.theatre-map-wrap {
+  width: 100%;
+  height: 240px;              /* match visual height of theatres box */
+  border: 2px solid #737373;  /* charcoal edge to match medals box */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  margin-top: 10px;
+}
+
+.theatre-map-wrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #f4f6f7;        /* sea */
+}
+
+/* pins + labels (static) */
+.pin { pointer-events: none; }
+.pin circle {
+  fill: #bab86c;              /* khaki */
+  stroke: #737373;
+  stroke-width: 2;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.25));
+}
+.pin text {
+  font: 12px/1.2 system-ui, Segoe UI, Arial, sans-serif;
+  fill: #222;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.leader {
+  stroke: #737373;
+  stroke-opacity: .45;
+  stroke-width: 1;
+}
+/* --- Startup screen styles --- */
+.startup { 
+  max-width: 880px; 
+  margin: 40px auto; 
+  padding: 22px 18px; 
+  background:#fff; 
+  border:3px solid #bab86c;   /* khaki */
+  border-radius: 18px; 
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+.startup-title { 
+  margin: 6px 0 14px; 
+  font-size: 1.2rem;         /* smaller, subtle heading */
+  text-align:center; 
+  color:#555;
+  font-weight: 500;
+
+}
+.era-grid { 
+  display:grid; 
+  grid-template-columns:1fr 1fr; 
+  gap:16px; 
+  margin-top: 25px;
+}
+.era-card { 
+  all:unset; 
+  cursor:pointer; 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  justify-content:center;
+  padding:22px 18px; 
+  background:#fff; 
+  border:3px solid #737373;   /* charcoal */
+  border-radius:16px; 
+  transition:.15s; 
+  text-align:center;
+}
+.era-card:hover { 
+  border-color:#bab86c; 
+  transform:translateY(-2px); 
+}
+.era-badge { 
+  font-weight:800; 
+  background:#bab86c; 
+  padding:6px 12px; 
+  border-radius:999px; 
+  margin-bottom:10px; 
+  color:#222;
+}
+.era-heading { 
+  font-size:20px; 
+  font-weight:700; 
+  margin-bottom:4px; 
+  color:#222;
+}
+.era-sub { 
+  font-size:14px; 
+  color:#555; 
+}
+.hidden { display:none !important; }
+
+.startup-logo {
+  display:block;
+  max-width: 100px;   /* much smaller */
+  height: auto;
+  margin: 0 auto 20px auto; /* center + spacing */
+}
+.startup-logo-wrap {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* line, logo, line */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-line {
+  height: 3px;
+  background: #bab86c; /* khaki */
+}
+
+.startup-logo {
+  display: block;
+  max-width: 100px;
+  height: auto;
+  margin: 0 40px; /* adjust until blue gap = red gap */
+}
+/* === Page Title + Strapline === */
+.page-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #737373;   /* charcoal */
+  margin: 0 0 10px;
+  text-align: center;
+  position: relative;
+}
+
+.page-title::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: #bab86c; /* khaki */
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+.page-strap {
+  font-size: 17px;
+  font-style: italic;
+  font-family: system-ui, Arial, sans-serif;
+  color: #555;
+  margin: 12px 0 25px;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+/* Subtle disclaimer under WWI/WWII choice */
+.startup-disclaimer {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  margin-top: 18px;
+  font-style: italic;
+}
+
+/* --- CTA Refined (WWI + WWII) --- */
+.cta {
+  margin-top: 28px;
+  padding: 22px 20px;
+  background: #fff;
+  border: 3px solid #bab86c;   /* khaki border */
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,.1);
+}
+
+.cta p {
+  margin: 0 0 14px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #333;
+}
+
+.cta a {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  background: #bab86c;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.cta a:hover { background: #9c9a52; }
+
+
+/* --- Final narrative CTA (clean section style) --- */
+
+.cta.cta-final {
+  position: relative;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 14px 10px 26px;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* top divider */
+.cta.cta-final::before {
+  content: "";
+  display: block;
+  width: 70%;
+  max-width: 520px;
+  height: 1px;
+  background: #bab86c;
+  margin: 0 auto 18px;
+}
+
+/* bottom divider */
+.cta.cta-final::after {
+  content: "";
+  display: block;
+  width: 70%;
+  max-width: 520px;
+  height: 1px;
+  background: #bab86c;
+  margin: 18px auto 0;
+}
+
+.cta.cta-final p {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: #333;
+}
+
+.cta.cta-final a {
+  display: inline-block;
+  background: #bab86c;
+  color: #000;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.cta.cta-final a:hover {
+  background: #a8a65c;
+}
+
+/* --- Alternate Theatre Card (matches .result-card exactly) --- */
+.alt-theatre-card {
+  margin-top: 15px;
+  padding: 12px 14px;
+  background: #fff;                  /* identical to other cards */
+  border: 3px solid #bab86c;         /* same thickness + colour */
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.06);
+  color: #333;
+}
+
+.alt-theatre-card h3 {
+  margin: 0 0 6px;
+  color: #737373;                    /* charcoal */
+  font-size: 1rem;
+  font-weight: 700;                  /* matches other headings */
+}
+
+.alt-theatre-card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+/* === Underline all box titles === */
+.result-card h3 {
+  text-decoration: underline;
+  text-decoration-color: #737373;  /* khaki underline to match theme */
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;      /* small gap below text */
+}
+
+/* === Recruitment Hotspot layout (list + mini-map) === */
+
+.hotspot-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.hotspot-content .hotspot-left {
+  flex: 1;
+  padding-right: 100px; /* reserve space for the map */
+  box-sizing: border-box;
+}
+
+.hotspot-right {
+  flex: 0 0 auto;
+  position: relative;
+  margin-top: -2.1em;           /* tucks the map up */
+  transform: translateX(-90px); /* keeps it snug to the list */
+}
+
+.hotspot-content .hotspot-left ul,
+.hotspot-content .hotspot-left p {
+  margin-top: 0;
+}
+
+.hotspot-content .hotspot-left ul {
+  padding-left: 18px;
+}
+
+/* Slight emphasis for recruitment locations */
+.hotspot-left li {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Slightly tighten bullet spacing */
+.hotspot-left li + li {
+  margin-top: 2px;
+}
+
+/* Optional only if you still use this older ID somewhere */
+#hotspotMapWrap {
+  width: 180px;
+  height: 200px;
+  border: 2px solid #737373;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+#hotspotMapWrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #f4f6f7;
+}
+
+/* ============================================================
+   MODE SELECTION (WWI / WWII HUB)
+   ============================================================ */
+
+.mode-panel {
+  text-align: center;
+  background: #fff;
+  border: 2px solid #bab86c;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 50px 40px;
+}
+
+.mode-panel h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Container for the Action Set */
+.mode-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.mode-action-set {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+}
+
+/* Button Styling */
+.mode-btn {
+  width: 100%;
+  padding: 20px;
+  background-color: #bab86c;
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.mode-btn:hover {
+  transform: translateY(-2px);
+  background-color: #9c9a52;
+}
+
+/* Subtext Styling (Underneath) */
+.mode-subtext {
+  margin-top: 15px;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.mode-officer-note {
+  margin-top: 30px;
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
+}
+
+.mode-divider {
+  border: none;
+  border-top: 3px solid #bab86c; /* Khaki color to match your theme */
+  width: 50%;                    /* Keeps it elegant and centered */
+  margin: 10px auto 20px auto;   /* Adjusts vertical spacing */
+}
+
+.mode-divider-top {
+  border: none;
+  border-top: 3px solid #bab86c; /* Khaki line */
+  width: 50%;                    /* Slightly shorter than the bottom one for visual balance */
+  margin: 25px auto 25px auto;  /* Adjusts the gap between header and buttons */
+}
+
+/* Center only the heading and the intro paragraph in WWI panel */
+#wwiPanel h1 {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+}
+
+/* only this specific intro paragraph should be centered */
+#wwiPanel .wwi-intro {
+  position: relative;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+  margin-bottom: -10px;   /* keep your existing spacing */
+  padding-bottom: 15px;
+}
+
+/* the underline that was on h1 + p now targets the intro paragraph */
+#wwiPanel .wwi-intro::after {
+  content: "";
+  display: block;
+  width: 200px;
+  height: 2px;
+  background-color: #bab86c;
+  margin: 25px auto 0 auto;
+}
+
+/* explicit left-align for card content inside the WWI grid */
+#wwiPanel .wwi-card p,
+#wwiPanel .wwi-card li,
+#wwiPanel .wwi-card table {
+  text-align: left;
+}
+
+/* === WWII Medal UI (white boxed look only) === */
+
+.medal-note {
+  margin-top: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #;
+
+  background: linear-gradient(
+    to bottom,
+    #eeeeee 0%,
+    #f4f4f4 60%,
+    transparent 100%
+  );
+
+  border-top: 1px solid #bab86c; /* khaki divider */
+}
+
+.medal-group { padding: 8px 10px; }
+
+.medal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.medal-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 4px 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  width: 310px;         /* ← fixed width so boxes don’t run full width */
+  margin: 4px 0;        /* vertical spacing between rows */
+}
+
+
+.medal-ribbon {
+  display: block;
+  height: 12px;
+  width: 120px;
+  border: 1px solid #444;
+  border-radius: 2px;
+}
+
+.medal-name {
+  font-size: .92rem;
+  color: #000;
+  white-space: nowrap;
+}
+/* === WWII Recruitment Phase Meter === */
+/* Match alignment style of Confidence card */
+.phase-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.phase-meter {
+  background: #f9f9f9;
+  border: 1px solid #bab86c;   /* khaki outline */
+  padding: 10px 12px;
+  border-radius: 8px;
+  min-width: 180px;
+  position: relative;
+  top: -1.2em;
+  margin-bottom: -1em;
+}
+
+.phase-item {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  opacity: .25;                /* dulled by default */
+}
+
+.phase-item.is-active { opacity: 1; }
+
+.phase-swatch {
+  width: 16px;
+  height: 16px;
+  background: #bab86c;         /* khaki */
+  border: 1px solid #737373;   /* charcoal */
+  border-radius: 2px;
+}
+
+/* ============================================================
+   SECTION B.X — BATTALION EXPLORER LAYOUT
+   ============================================================ */
+   
+.battalion-grid {
+  display: grid;
+  gap: 15px;
+  background-color: #f9f9f9;        /* same soft field */
+  padding: 25px 32px;
+  border-radius: 16px;
+  width: calc(100% + 45px);         /* stretch to match .wwi-grid */
+  margin-left: -22px;
+  margin-right: -200px;
+  margin-top: 18px;
+  box-sizing: border-box;
+}
+
+.battalion-card {
+  border: 3px solid #bab86c;   /* match .wwi-card */
+  border-radius: 12px;         /* match .wwi-card */
+  padding: 12px 14px;          /* match .wwi-card */
+  background: #fff;            /* match .wwi-card */
+  box-shadow: 0 0 8px rgba(0,0,0,0.06); /* match .wwi-card */
+  color: #333;                 /* match .wwi-card */
+}
+
+.battalion-card h3 {
+  margin: 0 0 6px;
+  color: #737373;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-color: #737373;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.battalion-card:hover {
+  box-shadow: 0 4px 6px rgba(0,0,0,0.12);
+}
+.battalion-note {
+  margin: 8px 0 14px 0;
+  padding: 10px 14px;
+  background: #f9f9f9;
+  border-left: 3px solid #bab86c;
+  color: #444;
+  font-size: 15px;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* === Back-to-Home Button (inside khaki border) === */
+.back-home-wrap {
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.back-home-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: transparent;
+  border: none;
+}
+
+.back-home-link:hover {
+  color: #333;
+}
+
+.startup-tagline {
+  font-size: 1.2rem;
+  color: #444;
+  font-weight: 400;
+}
+
+.startup-divider {
+  height: 3px;
+  background: #bab86c; /* same khaki */
+  width: 250px;         /* exact same size as logo lines */
+  margin: 14px auto 24px;
+  border-radius: 2px;
+}
+/* Title above tagline */
+.startup-heading-block {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.startup-heading {
+  font-size: 2.0rem;     /* bigger */
+  font-weight: 800;
+  color: #222;           /* darker than current */
+  margin: 10px 0 6px;
+}
+
+/* Space above and below the title + tagline */
+.startup-heading-block {
+  text-align: center;
+  margin-top: 25px;   /* ⬆️ increase this for more gap above (was around 8px) */
+  margin-bottom: 25px; /* ⬇️ increase this for more gap below before divider */
+}
+
+/* === Casualty Burden: Segmented Traffic-Light Bar (CUMULATIVE) === */
+
+/* === Casualty Burden: Segmented Traffic-Light Bar (CUMULATIVE, WITH EMPHASIS) === */
+
+.burden-bar{
+  display:flex;
+  height:12px;
+  border:1px solid #bab86c;
+  border-radius:6px;
+  margin-top:6px;
+  background:#fffef8;
+  overflow:hidden;
+}
+
+.burden-segment{
+  flex:1;
+  opacity:0.15;                 /* inactive = very muted */
+  border-right:2px solid #bab86c; /* strong khaki separators */
+}
+
+.burden-segment:last-child{
+  border-right:none;
+}
+
+/* Segment colours */
+.burden-segment.low{ background:#78c679; }
+.burden-segment.medium{ background:#fdae61; }
+.burden-segment.high{ background:#d73027; }
+
+/* === CUMULATIVE LIGHTING (tiered intensity) === */
+/* Low: current = green strong */
+.burden-bar[data-active="low"] .burden-segment.low{
+  opacity:1;
+}
+
+/* Medium: green partially lit, amber strong */
+.burden-bar[data-active="medium"] .burden-segment.low{
+  opacity:0.6;
+}
+.burden-bar[data-active="medium"] .burden-segment.medium{
+  opacity:1;
+}
+
+/* High: green+amber partially lit, red strong */
+.burden-bar[data-active="high"] .burden-segment.low,
+.burden-bar[data-active="high"] .burden-segment.medium{
+  opacity:0.6;
+}
+.burden-bar[data-active="high"] .burden-segment.high{
+  opacity:1;
+}
+/* === WWII Global Theatre Disclaimer === */
+.theatre-disclaimer {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px 30px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* Minimalist Container */
+.story-cta-block {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;         /* Very tight vertical spacing */
+  margin-top: 5px;
+  width: 100%;
+  border: none !important; 
+}
+
+/* Subtle, small text */
+.story-cta-copy {
+  margin-bottom: 5px;     
+  font-weight: 600;
+  font-size: 0.8rem;      /* Smallest legible size */
+  color: rgba(0, 0, 0, 0.5); 
+  letter-spacing: 0.02em;          
+}
+
+/* Tight, content-driven button */
+.story-cta-btn {
+  display: inline-block;
+  width: auto !important; /* Forces button to shrink to text width */
+  min-width: 0 !important; /* Removes the minimum width restriction */
+  padding: 4px 12px;      /* Very slim padding */
+  background-color: #bab86c;
+  color: #fff !important;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.75rem;     /* Matches the small scale */
+  font-weight: bold;
+  transition: opacity 0.2s;
+}
+
+.story-cta-btn:hover {
+  background-color: #9c9a52;
+  opacity: 0.9;
+}
+
+.wwii-hotspot-note {
+  margin-top: 10px;
+  padding: 8px 10px 10px 10px;
+  background: linear-gradient(to bottom, #f2f2f2 0%, #f2f2f2 60%, rgba(242,242,242,0) 100%);
+  border-top: 1px solid #bab86c;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #333;
+}
+
+.estimator-divider {
+  border: none;
+  border-top: 3px solid #bab86c;
+  width: 40%;
+  margin: 14px auto 22px auto;
+}
+
+.estimator-container h1 {
+  text-align: center;
+}
