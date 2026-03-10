@@ -107,7 +107,7 @@
 
     <button onclick="estimate()">Estimate</button>
 
-    <div id="trafficLight" style="font-size: 1.5em; margin-top: 10px;"></div>
+    <div id="wwiTrafficLight" style="font-size: 1.5em; margin-top: 10px;"></div>
 
     <!-- 🔄 CHANGED: separate output container for WWI only -->
     <div id="wwiResult"></div>
@@ -120,10 +120,10 @@
 </div>
 
 <!-- WWII panel (cleaned) -->
-  <div id="wwiiPanel" class="panel hidden">
+<div id="wwiiPanel" class="panel hidden">
   <div class="estimator-container">
     <h1>WWII Soldier Service Estimator</h1>
-<hr class="estimator-divider">
+    <hr class="estimator-divider">
 
     <label for="serviceNumberWWII">Army Number:</label>
     <input type="text" id="serviceNumberWWII" placeholder="e.g. 5173621" />
@@ -132,11 +132,12 @@
 
     <div id="resultWWII"></div>
 
-<div class="cta cta-final">
-  <p><strong>Every service number hides a deeper story.</strong></p>
-  <a href="https://www.historyrecon.co.uk/research" target="_blank" rel="noopener">🔎 View research packages</a>
-</div>
+    <div class="cta cta-final">
+      <p><strong>Every service number hides a deeper story.</strong></p>
+      <a href="https://www.historyrecon.co.uk/research" target="_blank" rel="noopener">🔎 View research packages</a>
+    </div>
   </div>
+</div>
     
     <!-- ==========================================
      WWI BATTALION HISTORY PANEL
@@ -196,3 +197,4 @@
 </div>
 
 <script src="script.js"></script>
+
