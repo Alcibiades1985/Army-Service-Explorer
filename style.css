@@ -961,5 +961,9 @@ button:hover { background-color: #9c9a52; }
   text-align: center;
 }
 
+body {
+  background: transparent;
+  margin: 0;
+}
 
 
