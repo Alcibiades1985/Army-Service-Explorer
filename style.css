@@ -62,13 +62,11 @@ button:hover { background-color: #9c9a52; }
 .wwi-grid {
   display: grid;
   gap: 15px;
-  background-color: #f9f9f9;        /* soft field */
-  padding: 25px 32px;               /* inner breathing space */
+  background-color: #f9f9f9;
+  padding: 25px 32px;
   border-radius: 16px;
-  width: calc(100% + 45px);         /* expand to overlap both edges equally */
-  margin-left: -22px;               /* pull left to match extra width */
-  margin-right: -200px;              /* keep symmetrical */
-  margin-top: 18px;
+  width: 100%;
+  margin: 18px 0 0 0;
   box-sizing: border-box;
 }
 
@@ -730,13 +728,11 @@ button:hover { background-color: #9c9a52; }
 .battalion-grid {
   display: grid;
   gap: 15px;
-  background-color: #f9f9f9;        /* same soft field */
+  background-color: #f9f9f9;
   padding: 25px 32px;
   border-radius: 16px;
-  width: calc(100% + 45px);         /* stretch to match .wwi-grid */
-  margin-left: -22px;
-  margin-right: -200px;
-  margin-top: 18px;
+  width: 100%;
+  margin: 18px 0 0 0;
   box-sizing: border-box;
 }
 
@@ -955,4 +951,5 @@ button:hover { background-color: #9c9a52; }
 .estimator-container h1 {
   text-align: center;
 }
+
 
