@@ -1,3 +1,12 @@
+#service-estimator {
+  all: initial;
+  font-family: Arial, sans-serif;
+}
+
+#service-estimator * {
+  box-sizing: border-box;
+}
+
 /* Base */
 body {
   font-family: sans-serif;
@@ -951,5 +960,6 @@ button:hover { background-color: #9c9a52; }
 .estimator-container h1 {
   text-align: center;
 }
+
 
 
