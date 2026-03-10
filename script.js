@@ -6792,16 +6792,18 @@ battles = BATTLE_ORDER.filter(b => (battles || []).includes(b));
 
     const placed = []; 
 
-    const battleStack = document.createElement("div");
+const battleStack = document.createElement("div");
 battleStack.style.position = "absolute";
-battleStack.style.bottom = "10px";
-battleStack.style.right = "155px";
-battleStack.style.top = "auto";
-battleStack.style.left = "auto";
+
+/* SAFE CORRIDOR POSITIONING */
+battleStack.style.top = "42%";     // protects Liège
+battleStack.style.right = "22%";   // protects Luxembourg
+
 battleStack.style.display = "flex";
 battleStack.style.flexDirection = "column";
 battleStack.style.alignItems = "flex-start";
 battleStack.style.gap = "4px";
+
 overlay.appendChild(battleStack);
 
 (battles || []).forEach((b) => {
@@ -8284,6 +8286,7 @@ window.estimateWWII = estimateWWII;
 
 })();
 })();
+
 
 
 
