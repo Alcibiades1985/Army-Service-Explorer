@@ -2603,12 +2603,36 @@ if (typeof window !== "undefined") {
     while (panelMount.firstChild) panelMount.removeChild(panelMount.firstChild);
   }
 
-  function mountNode(node) {
-    if (!node) return;
-    node.classList.remove("hidden");
-    panelMount.appendChild(node);
-    try { panelMount.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
-  }
+function mountNode(node) {
+  if (!node) return;
+  node.classList.remove("hidden");
+  panelMount.appendChild(node);
+  try { panelMount.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
+  queueEstimatorHeight();
+}
+
+   function sendEstimatorHeight() {
+  const height = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight
+  );
+
+  window.parent.postMessage(
+    {
+      type: "setHeight",
+      height: height
+    },
+    "https://britisharmyservicenumbers.co.uk"
+  );
+}
+
+function queueEstimatorHeight() {
+  setTimeout(sendEstimatorHeight, 50);
+  setTimeout(sendEstimatorHeight, 250);
+  setTimeout(sendEstimatorHeight, 600);
+}
   
 // ============================================================
 // UNIVERSAL BACK-TO-HOME BUTTON — INSIDE KHAKI ESTIMATOR BORDER
@@ -2622,13 +2646,14 @@ function addBackHomeButton(target = panelMount) {
   btn.className = "back-home-link";
 
   // click handler
-  btn.addEventListener("click", () => {
-    clearMount();
-    if (startup) {
-      startup.classList.remove("hidden");
-      startup.scrollIntoView({ behavior: "smooth" });
-    }
-  });
+btn.addEventListener("click", () => {
+  clearMount();
+  if (startup) {
+    startup.classList.remove("hidden");
+    startup.scrollIntoView({ behavior: "smooth" });
+  }
+  queueEstimatorHeight();
+});
 
   // === find the estimator container and append inside it ===
   const container = target.querySelector(".estimator-container");
@@ -2774,20 +2799,22 @@ if (researchBtn) {
     if (startup) startup.classList.add("hidden");
   }
 
-  function wireStartupButtons() {
-    if (wwiBtn) {
-      wwiBtn.addEventListener("click", () => {
-        hideStartup();
-        showMode("wwi");
-      });
-    }
-    if (wwiiBtn) {
-      wwiiBtn.addEventListener("click", () => {
-        hideStartup();
-        showMode("wwii");
-      });
-    }
+function wireStartupButtons() {
+  if (wwiBtn) {
+    wwiBtn.addEventListener("click", () => {
+      hideStartup();
+      showMode("wwi");
+      queueEstimatorHeight();
+    });
   }
+  if (wwiiBtn) {
+    wwiiBtn.addEventListener("click", () => {
+      hideStartup();
+      showMode("wwii");
+      queueEstimatorHeight();
+    });
+  }
+}
 
   /* ------------------------------
    * Initialise once DOM is ready
@@ -2800,6 +2827,7 @@ if (researchBtn) {
 ready(() => {
   wireStartupButtons();
   // Do NOT auto-show an era; we stay on the startup screen until the user chooses.
+  queueEstimatorHeight();
 });
 })();
 
@@ -8177,11 +8205,14 @@ try {
   </div>
 `;
 
-    } else {
+       } else {
       renderWWIIMap(mapMount, resolvedTheatres);
     }
   }
 
+  if (typeof queueEstimatorHeight === "function") {
+    queueEstimatorHeight();
+  }
 }
 
 // --- C.5 — Core Estimator Logic ---
@@ -8253,6 +8284,7 @@ window.estimateWWII = estimateWWII;
 
 })();
 })();
+
 
 
 
