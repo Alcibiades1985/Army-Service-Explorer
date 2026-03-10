@@ -8252,17 +8252,31 @@ function estimateWWII() {
 
 // --- C.6 — Export for global access ---
 window.estimateWWII = estimateWWII;
-  // --- C.7 — Event Binding & Public Exposure (mirror WWI pattern) ---
-const wwiiEstimateBtn = document.querySelector("#wwiiPanel button");
-if (wwiiEstimateBtn) {
-  wwiiEstimateBtn.addEventListener("click", estimateWWII);
-}
+// --- C.7 — Event Binding (DELEGATED VERSION) ---
+  document.addEventListener("click", function(event) {
+    if (event.target.closest("#wwiBtn")) {
+      console.log("WWI Button clicked!");
+    }
+    if (event.target.closest("#wwiiBtn")) {
+      console.log("WWII Button clicked!");
+    }
+    if (event.target.id === "exploreRegimentalBtn") {
+      console.log("Explore Regimental button clicked!");
+      if (typeof window.estimateWWII === 'function') {
+        window.estimateWWII();
+      } else {
+        console.error("estimateWWII is not defined globally.");
+      }
+    }
+    if (event.target.id === "exploreBattalionBtn") {
+      console.log("Explore Battalion button clicked!");
+    }
+  });
 
-// Expose to the Dual Axis OS
-window.__wwiiEstimate = estimateWWII;
-console.log("[HRBootWWII] WWII estimator ready and linked.");
-
-
+  // Expose to the Dual Axis OS
+  window.__wwiiEstimate = window.estimateWWII;
+  console.log("[HRBootWWII] WWII estimator ready and linked.");
+   
 /* === END SECTION C === */
 
   // --- Global Exports ---
@@ -8271,3 +8285,4 @@ console.log("[HRBootWWII] WWII estimator ready and linked.");
 
 })();
 })();
+
