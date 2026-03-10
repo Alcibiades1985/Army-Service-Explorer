@@ -7952,36 +7952,7 @@ function renderWWIIResults(record, mount) {
     : "";
 
   const phase = getRecruitmentPhase(parseInt(window.lastInputNumber, 10), record.start, record.end);
-
-  let html = "";
-
-  // Theatres of Service Card + Map
-  html += `
-    <div class="result-card">
-      <h3>Theatres of Service</h3>
-      <div id="wwiiMapMount" style="height:220px;width:100%;"></div>
-    </div>`;
-
-  // Medal Card
-   html += renderMedals(medals, hasGlobalTheatre ? { note: globalMedalNote } : null);
-
-  // Recruitment Phase Card
-  html += `
-    <div class="result-card">
-      <h3>Recruitment Phase</h3>
-      <p>${phase.text}</p>
-    </div>`;
-
-  // Recruitment Hotspot Card (no map)
-  if (record.hotspot && record.hotspot.length) {
-    const hs = record.hotspot.map(h => `<li>${h}</li>`).join("");
-    html += `
-      <div class="result-card">
-        <h3>Recruitment Hotspots</h3>
-        <ul>${hs}</ul>
-      </div>`;
-  }
-
+   
  // --- Match WWI Layout: Grid + Cards ---
 const resultDiv = document.getElementById("resultWWII");
 resultDiv.innerHTML = "";
@@ -8282,5 +8253,6 @@ window.estimateWWII = estimateWWII;
 
 })();
 })();
+
 
 
