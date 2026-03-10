@@ -48,13 +48,14 @@ button {
 
 button:hover { background-color: #9c9a52; }
 
-/* Result area (wrapper only now; individual cards below) */
-#result {
+
+#wwiResult,
+#resultWWII {
   margin-top: 20px;
-  padding: 0;           /* cards handle their own padding */
+  padding: 0;
   background: transparent;
   border: 0;
-  font-weight: normal;  /* card titles carry the emphasis */
+  font-weight: normal;
 }
 
 /* Grid of result cards + balanced light-grey field */
@@ -954,3 +955,4 @@ button:hover { background-color: #9c9a52; }
 .estimator-container h1 {
   text-align: center;
 }
+
