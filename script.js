@@ -6795,9 +6795,11 @@ battles = BATTLE_ORDER.filter(b => (battles || []).includes(b));
 const battleStack = document.createElement("div");
 battleStack.style.position = "absolute";
 
-/* SAFE CORRIDOR POSITIONING */
-battleStack.style.top = "42%";     // protects Liège
-battleStack.style.right = "22%";   // protects Luxembourg
+/* restore the original safe corridor */
+battleStack.style.bottom = "10px";
+battleStack.style.right = "155px";
+battleStack.style.top = "auto";
+battleStack.style.left = "auto";
 
 battleStack.style.display = "flex";
 battleStack.style.flexDirection = "column";
@@ -8286,6 +8288,7 @@ window.estimateWWII = estimateWWII;
 
 })();
 })();
+
 
 
 
