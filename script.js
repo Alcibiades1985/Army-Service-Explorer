@@ -6185,13 +6185,51 @@ function handleRegimentalPick(regimentName) {
     console.warn("Cavalry disclaimer (WWII reg explorer) render failed:", err);
   }
 
+// Shared WWII structural notes for Regimental Explorer
+let wwiiRegimentalNoteFired = false;
+
+// Cavalry / RAC structural note
+try {
+  const cavalryAppliesTo = [
+    "Life Guards",
+    "Royal Horse Guards",
+    "Lancers",
+    "Dragoons",
+    "Hussars",
+    "Royal Tank Regiment",
+    "Royal Armoured Corps"
+  ];
+
+  const regNameForNote = regimentName ? String(regimentName) : "";
+  const showCavalryNote = cavalryAppliesTo.some(k => regNameForNote.includes(k));
+
+  if (showCavalryNote) {
+    const card = document.createElement("div");
+    card.className = "wwi-card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = "Cavalry to Armour";
+
+    const p = document.createElement("p");
+    p.style.margin = "0";
+    p.innerHTML =
+      "<strong>Royal Armoured Corps (1939):</strong> From 1939, cavalry regiments were incorporated into the Royal Armoured Corps and served as tank units, while retaining their historic titles.";
+
+    card.appendChild(h3);
+    card.appendChild(p);
+    grid.appendChild(card);
+
+    wwiiRegimentalNoteFired = true;
+  }
+} catch (err) {
+  console.warn("Cavalry disclaimer (WWII reg explorer) render failed:", err);
+}
+
 // General Service Corps note
 try {
-  if (
-    regimentName &&
-    regimentName.indexOf("General Service Corps") !== -1
-  ) {
+  const regNameForNote = regimentName ? String(regimentName) : "";
 
+  if (regNameForNote.includes("General Service Corps")) {
     const card = document.createElement("div");
     card.className = "wwi-card";
 
@@ -6210,9 +6248,121 @@ try {
     card.appendChild(h3);
     card.appendChild(p);
     grid.appendChild(card);
+
+    wwiiRegimentalNoteFired = true;
   }
 } catch (err) {
   console.warn("GSC disclaimer render failed:", err);
+}
+
+// Corps explainer note
+try {
+  const regNameForNote = regimentName ? String(regimentName) : "";
+
+  const corpsAppliesTo = [
+    "Royal Armoured Corps",
+    "Reconnaissance Corps",
+    "Royal Army Service Corps",
+    "Royal Artillery",
+    "Royal Engineers",
+    "Royal Corps of Signals",
+    "Royal Electrical & Mechanical Engineers",
+    "Royal Army Ordnance Corps",
+    "Intelligence Corps",
+    "(Royal) Pioneer Corps",
+    "Royal Army Medical Corps",
+    "(Royal) Army Dental Corps",
+    "(Royal) Army Pay Corps",
+    "(Royal) Military Police",
+    "Army Catering Corps",
+    "Army Physical Training (Staff) Corps",
+    "Royal Army Veterinary Corps",
+    "Band of the Royal Military College",
+    "Military Provost Staff Corps",
+    "(Royal) Army Education Corps",
+    "Small Arms School Corps",
+    "Non-Combatant Corps"
+  ];
+
+  const showCorpsNote = corpsAppliesTo.some(k => regNameForNote.includes(k));
+
+  if (showCorpsNote) {
+    const card = document.createElement("div");
+    card.className = "wwi-card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = "Corps Note";
+
+    const p = document.createElement("p");
+    p.style.margin = "0";
+    p.innerHTML = `
+      Unlike regiments in the British Army, <strong>corps organised soldiers by specialist role</strong>. Examples include battlefield communications in the Royal Corps of Signals or engineering and bridge building in the Royal Engineers.
+    `;
+
+    card.appendChild(h3);
+    card.appendChild(p);
+    grid.appendChild(card);
+
+    wwiiRegimentalNoteFired = true;
+  }
+} catch (err) {
+  console.warn("Corps disclaimer (WWII reg explorer) render failed:", err);
+}
+
+// Guards regiments note
+try {
+  const regNameForNote = regimentName ? String(regimentName) : "";
+
+  const isGuardsRegiment =
+    regNameForNote.includes("Guard") &&
+    regNameForNote !== "Life Guards" &&
+    regNameForNote !== "Royal Horse Guards";
+
+  if (isGuardsRegiment) {
+    const card = document.createElement("div");
+    card.className = "wwi-card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = "Guards Note";
+
+    const p = document.createElement("p");
+    p.style.margin = "0";
+    p.innerHTML = `
+      The <strong>Guards regiments</strong> formed the British Army’s senior infantry units.
+      They served as frontline soldiers in wartime while also carrying out ceremonial duties associated with the protection of the monarch.
+    `;
+
+    card.appendChild(h3);
+    card.appendChild(p);
+    grid.appendChild(card);
+
+    wwiiRegimentalNoteFired = true;
+  }
+} catch (err) {
+  console.warn("Guards disclaimer (WWII reg explorer) render failed:", err);
+}
+
+// Infantry fallback note
+try {
+  if (!wwiiRegimentalNoteFired) {
+    const card = document.createElement("div");
+    card.className = "wwi-card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = "Infantry Note";
+
+    const p = document.createElement("p");
+    p.style.margin = "0";
+    p.innerHTML = `
+      Infantry regiments were organised into <strong>battalions</strong>, the units that actually fought in the field. A regiment might have several battalions serving in different divisions and theatres at the same time.
+    `;
+
+    card.appendChild(h3);
+    card.appendChild(p);
+    grid.appendChild(card);
+  }
+} catch (err) {
+  console.warn("Infantry fallback note (WWII reg explorer) render failed:", err);
 }
   
 // 2️⃣ Recruitment Hotspots (from WWII data)
