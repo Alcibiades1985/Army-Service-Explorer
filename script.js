@@ -4938,7 +4938,6 @@ if (
       }
 
       // Render cards
-      displayTrafficLight("high");
       renderResultGrid(cards);
 
       /* ------------------------------
