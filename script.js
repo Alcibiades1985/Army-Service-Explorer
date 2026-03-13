@@ -6364,6 +6364,13 @@ try {
 } catch (err) {
   console.warn("Infantry fallback note (WWII reg explorer) render failed:", err);
 }
+
+// ⭐ Enlistment Number Range (always first card)
+try {
+  renderWWIIEnlistmentNumberCard(regimentName, grid);
+} catch (err) {
+  console.warn("WWII enlistment range render failed:", err);
+}
   
 // 2️⃣ Recruitment Hotspots (from WWII data)
 try {
@@ -6393,9 +6400,6 @@ try {
   if (!document.getElementById("storyCTABlockWWIIRegimental")) {
   grid.appendChild(createStoryCTABlock("storyCTABlockWWIIRegimental"));
 }
-
-// 3️⃣ ⭐ Enlistment Number Range card
-renderWWIIEnlistmentNumberCard(regimentName, grid);
   
 // 3️⃣b Campaign Medals card
 try {
