@@ -8094,7 +8094,57 @@ window.WWII_REGIMENT_LIST = Array.from(
 ).sort();
   
 // --- C.3 — Recruitment Phase Formula (returns band for UI meter)
-function getRecruitmentPhase(number, start, end) {
+function getRecruitmentPhase(number, start, end, regiment) {
+  const regName = String(regiment || "").trim();
+
+  // --- Life Guards special rule ---
+  // Combined 1st + 2nd Life Guards block must be treated as TWO sequential
+  // 4-phase recruitment streams rather than one single 4-band block.
+  if (regName === "Life Guards") {
+    const totalSpan = end - start + 1;
+    const halfSpan = totalSpan / 2;
+
+    const firstHalfStart = start;
+    const firstHalfEnd = start + halfSpan - 1;
+    const secondHalfStart = firstHalfEnd + 1;
+    const secondHalfEnd = end;
+
+    let localStart, localEnd;
+
+    if (number >= firstHalfStart && number <= firstHalfEnd) {
+      localStart = firstHalfStart;
+      localEnd = firstHalfEnd;
+    } else {
+      localStart = secondHalfStart;
+      localEnd = secondHalfEnd;
+    }
+
+    const localPct = (number - localStart) / (localEnd - localStart);
+
+    if (localPct <= 0.15) {
+      return {
+        text: "Within the combined Life Guards block, this number falls into an early segment consistent with a pre-war (pre-1 Sept 1939) Regular or Territorial Army enlistment.",
+        band: "prewar"
+      };
+    } else if (localPct <= 0.40) {
+      return {
+        text: "Within the combined Life Guards block, this number likely falls into the early wartime volunteer phase (1939–41).",
+        band: "early"
+      };
+    } else if (localPct <= 0.75) {
+      return {
+        text: "Within the combined Life Guards block, this number likely falls into the mid-war conscription period (1942–43).",
+        band: "mid"
+      };
+    } else {
+      return {
+        text: "Within the combined Life Guards block, this number likely represents a late-war or immediate post-D-Day enlistment (1944–45).",
+        band: "late"
+      };
+    }
+  }
+
+  // --- Standard rule for all other regiments/corps ---
   const pct = (number - start) / (end - start);
 
   if (pct <= 0.15) {
@@ -8119,6 +8169,7 @@ function getRecruitmentPhase(number, start, end) {
     };
   }
 }
+
   
   // Render the 4-phase meter block
 function renderPhaseMeter(activeBand) {
@@ -8152,7 +8203,12 @@ function renderWWIIResults(record, mount) {
        <b>Africa Star</b>, <b>Italy Star</b>, or <b>Burma Star</b> (among others).`
     : "";
 
-  const phase = getRecruitmentPhase(parseInt(window.lastInputNumber, 10), record.start, record.end);
+const phase = getRecruitmentPhase(
+  parseInt(window.lastInputNumber, 10),
+  record.start,
+  record.end,
+  record.regiment
+);
    
  // --- Match WWI Layout: Grid + Cards ---
 const resultDiv = document.getElementById("resultWWII");
