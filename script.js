@@ -6151,6 +6151,9 @@ function handleRegimentalPick(regimentName) {
   // Safety: if grid mount failed, stop before we throw and kill rendering
   if (!grid) return;
 
+   // 3️⃣ ⭐ Enlistment Number Range card
+renderWWIIEnlistmentNumberCard(regimentName, grid);
+
   // Cavalry → Armour note (DOM-safe; no template strings to break parsing)
   try {
     const cavalryAppliesTo = [
@@ -6364,9 +6367,6 @@ try {
 } catch (err) {
   console.warn("Infantry fallback note (WWII reg explorer) render failed:", err);
 }
-
-// 3️⃣ ⭐ Enlistment Number Range card
-renderWWIIEnlistmentNumberCard(regimentName, grid);
   
 // 2️⃣ Recruitment Hotspots (from WWII data)
 try {
