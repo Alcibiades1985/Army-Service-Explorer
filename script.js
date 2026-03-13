@@ -7865,8 +7865,6 @@ const wwiiRegimentData = [
 
   { start: 528001, end: 721000, regiment: "Hussars", theatres: ["ME", "NA", "Italy", "Greece & Crete", "NWE", "BEF"], hotspot: ["The Household Cavalry recruited nationally, with no fixed local recruitment areas"] },
 
-  { start: 558471, end: 558761, regiment: "Royal Armoured Corps", theatres: ["BEF", "NA", "Italy", "Sicily", "NWE", "UK"], hotspot: ["The Royal Armoured Corps drew men from across the UK, with no fixed local recruitment areas"] },
-
   { start: 721001, end: 1842000, regiment: "Royal Artillery", theatres: ["Global"], hotspot: ["The Royal Artillery recruited nationally and allocated men to field, anti-aircraft, and coastal units as required"]  },
 
   { start: 1842001, end: 2303000, regiment: "Royal Engineers", theatres: ["Global"], hotspot: ["The Royal Engineers recruited nationally, drawing in men with trade and technical skills"] },
